@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.Utils;
 import uk.firedev.messagelib.config.ConfigLoader;
+import uk.firedev.messagelib.replacer.Replacer;
 
 import java.util.List;
 import java.util.Map;
@@ -166,10 +167,8 @@ public class ComponentMessage {
      * @return A new ComponentMessage with the replacements made.
      */
     public ComponentMessage replace(@NotNull String placeholder, @Nullable Object replacement) {
-        Component replaced = this.message.replaceText(
-            builder -> builder.matchLiteral(placeholder).replacement(Utils.getComponentFromObject(replacement))
-        );
-        return new ComponentMessage(replaced, messageType);
+        Replacer replacer = Replacer.replacer().addReplacement(placeholder, replacement);
+        return new ComponentMessage(replacer.apply(message), messageType);
     }
 
     /**
@@ -178,13 +177,17 @@ public class ComponentMessage {
      * @return A new ComponentMessage with the replacements made.
      */
     public ComponentMessage replace(@NotNull Map<String, Object> replacements) {
-        Component replaced = this.message;
-        for (Map.Entry<String, Object> entry : replacements.entrySet()) {
-            replaced = replaced.replaceText(
-                builder -> builder.matchLiteral(entry.getKey()).replacement(Utils.getComponentFromObject(entry.getValue()))
-            );
-        }
-        return new ComponentMessage(replaced, messageType);
+        Replacer replacer = Replacer.replacer().addReplacements(replacements);
+        return new ComponentMessage(replacer.apply(message), messageType);
+    }
+
+    /**
+     * Applies the specified Replacer to the message.
+     * @param replacer The Replacer to apply.
+     * @return A new ComponentMessage with the replacements made.
+     */
+    public ComponentMessage replace(@NotNull Replacer replacer) {
+        return new ComponentMessage(replacer.apply(message), messageType);
     }
 
     /**
