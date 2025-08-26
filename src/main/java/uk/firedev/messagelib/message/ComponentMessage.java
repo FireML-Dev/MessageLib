@@ -70,6 +70,13 @@ public abstract class ComponentMessage {
     // Abstract Things
 
     /**
+     * Creates a copy of this ComponentMessage.
+     *
+     * @return A new ComponentMessage that is a copy of this one.
+     */
+    public abstract ComponentMessage createCopy();
+
+    /**
      * Gets the MessageType of this message.
      *
      * @return The MessageType of this message.

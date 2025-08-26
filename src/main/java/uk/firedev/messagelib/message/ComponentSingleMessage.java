@@ -86,6 +86,14 @@ public class ComponentSingleMessage extends ComponentMessage {
      * {@inheritDoc}
      */
     @Override
+    public ComponentSingleMessage createCopy() {
+        return new ComponentSingleMessage(this.message, messageType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public @NotNull MessageType messageType() {
         return messageType;
     }

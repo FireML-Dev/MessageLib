@@ -94,6 +94,17 @@ public class ComponentListMessage extends ComponentMessage {
      * {@inheritDoc}
      */
     @Override
+    public ComponentListMessage createCopy() {
+        return new ComponentListMessage(
+            List.copyOf(this.message),
+            messageType
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public @NotNull MessageType messageType() {
         return messageType;
     }
