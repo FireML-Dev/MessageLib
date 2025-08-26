@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.Utils;
-import uk.firedev.messagelib.message.ComponentMessage;
+import uk.firedev.messagelib.message.ComponentSingleMessage;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,7 @@ public class Replacer {
     /**
      * Adds a single replacement to this Replacer.
      * @param string The string to replace.
-     * @param replacement The replacement object. Explicitly supports {@link Component} and {@link ComponentMessage}. Anything else will be converted to a String and processed.
+     * @param replacement The replacement object. Explicitly supports {@link Component} and {@link ComponentSingleMessage}. Anything else will be converted to a String and processed.
      * @return The modified Replacer.
      */
     public Replacer addReplacement(@NotNull String string, @Nullable Object replacement) {
@@ -37,7 +37,7 @@ public class Replacer {
 
     /**
      * Adds a map of replacements to this Replacer.
-     * @param replacements The replacements to add. Explicitly supports {@link Component} and {@link ComponentMessage} as values. Anything else will be converted to a String and processed.
+     * @param replacements The replacements to add. Explicitly supports {@link Component} and {@link ComponentSingleMessage} as values. Anything else will be converted to a String and processed.
      * @return The modified Replacer
      */
     public Replacer addReplacements(@NotNull Map<String, Object> replacements) {

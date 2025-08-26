@@ -1,0 +1,223 @@
+package uk.firedev.messagelib.message;
+
+import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import uk.firedev.messagelib.Utils;
+import uk.firedev.messagelib.config.ConfigLoader;
+import uk.firedev.messagelib.replacer.Replacer;
+
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+
+// NEEDS TO BE IMMUTABLE - any change makes a new instance.
+public class ComponentSingleMessage extends ComponentMessage {
+
+    private final Component message;
+    private final MessageType messageType;
+
+    protected ComponentSingleMessage(@NotNull Component message, @NotNull MessageType messageType) {
+        this.message = ComponentMessage.ROOT.append(message);
+        this.messageType = messageType;
+    }
+
+    // Message Getters
+
+    /**
+     * Gets the underlying message.
+     *
+     * @return The underlying message.
+     */
+    public @NotNull Component get() {
+        return message;
+    }
+
+    /**
+     * Gets the underlying message as plain text.
+     *
+     * @return The underlying message as plain text.
+     */
+    public @NotNull String getAsPlainText() {
+        return PlainTextComponentSerializer.plainText().serialize(message);
+    }
+
+    /**
+     * Gets the underlying message as JSON.
+     *
+     * @return The underlying message as JSON.
+     */
+    public @NotNull String getAsJson() {
+        return GsonComponentSerializer.gson().serialize(message);
+    }
+
+    /**
+     * Gets the underlying message as Legacy text.
+     *
+     * @return The underlying message as Legacy text.
+     */
+    public @NotNull String getAsLegacy() {
+        return LegacyComponentSerializer.legacySection().serialize(message);
+    }
+
+    /**
+     * Gets the underlying message as MiniMessage text.
+     *
+     * @return The underlying message as MiniMessage text.
+     */
+    public @NotNull String getAsMiniMessage() {
+        return MiniMessage.miniMessage().serialize(message);
+    }
+
+    // Class Methods
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull MessageType messageType() {
+        return messageType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ComponentSingleMessage messageType(@NotNull MessageType messageType) {
+        return new ComponentSingleMessage(message, messageType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ComponentSingleMessage append(@NotNull Object append) {
+        return new ComponentSingleMessage(
+            message.append(Utils.getComponentFromObject(append)),
+            messageType
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ComponentSingleMessage prepend(@NotNull Object prepend) {
+        return new ComponentSingleMessage(
+            Utils.getComponentFromObject(prepend),
+            messageType
+        ).append(message);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ComponentSingleMessage replace(@NotNull String placeholder, @Nullable Object replacement) {
+        Replacer replacer = Replacer.replacer().addReplacement(placeholder, replacement);
+        return new ComponentSingleMessage(replacer.apply(message), messageType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ComponentSingleMessage replace(@NotNull Map<String, Object> replacements) {
+        Replacer replacer = Replacer.replacer().addReplacements(replacements);
+        return new ComponentSingleMessage(replacer.apply(message), messageType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ComponentSingleMessage replace(@NotNull Replacer replacer) {
+        return new ComponentSingleMessage(replacer.apply(message), messageType);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ComponentSingleMessage parsePlaceholderAPI(@Nullable OfflinePlayer player) {
+        if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            return this;
+        }
+        return new ComponentSingleMessage(
+            Utils.parsePlaceholderAPI(message, player),
+            messageType
+        );
+    }
+
+    /**
+     * Checks if the underlying plain text matches the specified string.
+     * @param string The string to check against.
+     * @return True if the underlying plain text matches the specified string, false otherwise.
+     */
+    public boolean matchesString(@NotNull String string) {
+        return getAsPlainText().equals(string);
+    }
+
+    /**
+     * Checks if the underlying plain text contains the specified string.
+     * @param string The string to check for.
+     * @return True if the underlying plain text contains the specified string, false otherwise.
+     */
+    public boolean containsString(@NotNull String string) {
+        return getAsPlainText().contains(string);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isEmpty() {
+        return getAsPlainText().isEmpty();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getLength() {
+        return getAsPlainText().length();
+    }
+
+    // Sending
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void send(@Nullable Audience audience) {
+        messageType.send(audience, message);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void send(@NotNull List<Audience> audienceList) {
+        audienceList.forEach(this::send);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void broadcast() {
+        Bukkit.broadcast(message);
+    }
+
+}
