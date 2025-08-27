@@ -141,7 +141,7 @@ public class ComponentListMessage extends ComponentMessage {
     public ComponentListMessage appendEachLine(@NotNull Object append) {
         Component resolved = Utils.getComponentFromObject(append);
         List<Component> newMessage = this.message.stream()
-            .map(line -> ComponentMessage.componentMessage(line).append(resolved).get())
+            .map(line -> new ComponentSingleMessage(line, messageType).append(resolved).get())
             .toList();
         return new ComponentListMessage(newMessage, messageType);
     }
@@ -170,7 +170,7 @@ public class ComponentListMessage extends ComponentMessage {
     public ComponentListMessage prependEachLine(@NotNull Object prepend) {
         Component resolved = Utils.getComponentFromObject(prepend);
         List<Component> newMessage = this.message.stream()
-            .map(line -> ComponentMessage.componentMessage(line).prepend(resolved).get())
+            .map(line -> new ComponentSingleMessage(line, messageType).prepend(resolved).get())
             .toList();
         return new ComponentListMessage(newMessage, messageType);
     }
