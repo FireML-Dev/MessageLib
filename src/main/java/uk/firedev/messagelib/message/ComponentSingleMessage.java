@@ -20,6 +20,7 @@ import uk.firedev.messagelib.replacer.Replacer;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 
 // NEEDS TO BE IMMUTABLE - any change makes a new instance.
@@ -209,6 +210,17 @@ public class ComponentSingleMessage extends ComponentMessage {
      */
     public ComponentListMessage toListMessage() {
         return new ComponentListMessage(List.of(this.message), this.messageType);
+    }
+
+    /**
+     * Edits the underlying component using the provided editor function.
+     * The editor function takes the current component as input and returns a modified component.
+     *
+     * @param editor A function that modifies the current component.
+     * @return A new ComponentSingleMessage with the edited component.
+     */
+    public ComponentSingleMessage edit(@NotNull Function<Component, Component> editor) {
+        return new ComponentSingleMessage(editor.apply(this.message), this.messageType);
     }
 
     // Sending

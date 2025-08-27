@@ -261,6 +261,17 @@ public class ComponentListMessage extends ComponentMessage {
     }
 
     /**
+     * Edits the current message using the provided editor function.
+     *
+     * @param editor A function that takes a List of Components and returns a modified List of Components.
+     * @return A new ComponentListMessage with the edited message.
+     */
+    public ComponentListMessage edit(@NotNull Function<List<Component>, List<Component>> editor) {
+        List<Component> newMessage = editor.apply(new ArrayList<>(this.message));
+        return new ComponentListMessage(newMessage, this.messageType);
+    }
+
+    /**
      * Edits each line of the current message using the provided editor function.
      *
      * @param editor A function that takes a ComponentSingleMessage and returns a modified ComponentSingleMessage.
