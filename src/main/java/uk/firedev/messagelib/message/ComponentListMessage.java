@@ -159,7 +159,7 @@ public class ComponentListMessage extends ComponentMessage {
      * {@inheritDoc}
      */
     @Override
-    public ComponentListMessage replace(@NotNull Map<String, Object> replacements) {
+    public ComponentListMessage replace(@NotNull Map<String, ?> replacements) {
         Replacer replacer = Replacer.replacer().addReplacements(replacements);
         return new ComponentListMessage(replacer.apply(message), messageType);
     }

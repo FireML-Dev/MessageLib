@@ -141,7 +141,7 @@ public class ComponentSingleMessage extends ComponentMessage {
      * {@inheritDoc}
      */
     @Override
-    public ComponentSingleMessage replace(@NotNull Map<String, Object> replacements) {
+    public ComponentSingleMessage replace(@NotNull Map<String, ?> replacements) {
         Replacer replacer = Replacer.replacer().addReplacements(replacements);
         return new ComponentSingleMessage(replacer.apply(message), messageType);
     }

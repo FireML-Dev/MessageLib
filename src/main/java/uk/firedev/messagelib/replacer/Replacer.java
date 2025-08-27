@@ -40,7 +40,7 @@ public class Replacer {
      * @param replacements The replacements to add. Explicitly supports {@link Component} and {@link ComponentSingleMessage} as values. Anything else will be converted to a String and processed.
      * @return The modified Replacer
      */
-    public Replacer addReplacements(@NotNull Map<String, Object> replacements) {
+    public Replacer addReplacements(@NotNull Map<String, ?> replacements) {
         this.replacements.putAll(replacements);
         return this;
     }

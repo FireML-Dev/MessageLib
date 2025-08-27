@@ -120,7 +120,7 @@ public abstract class ComponentMessage {
      * @param replacements A map of placeholders to replacements. Explicitly supports {@link Component} and {@link ComponentSingleMessage} as values. Anything else will be converted to a String and processed.
      * @return A new ComponentMessage with the replacements made.
      */
-    public abstract ComponentMessage replace(@NotNull Map<String, Object> replacements);
+    public abstract ComponentMessage replace(@NotNull Map<String, ?> replacements);
 
     /**
      * Applies the specified Replacer to the message.
