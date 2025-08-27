@@ -65,21 +65,6 @@ public class Utils {
         return ComponentMessage.componentMessage(object.toString());
     }
 
-    public static Component getComponentFromObject(@Nullable Object object) {
-        if (object == null) {
-            return Component.empty();
-        }
-        if (object instanceof Component component) {
-            return component;
-        } else if (object instanceof ComponentSingleMessage singleMessage) {
-            return singleMessage.get();
-        } else if (object instanceof ComponentListMessage listMessage) {
-            return Component.join(JoinConfiguration.newlines(), listMessage.get());
-        } else {
-            return processString(object.toString());
-        }
-    }
-
     public static Component parsePlaceholderAPI(@NotNull Component component, @Nullable OfflinePlayer player) {
         if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             return component;

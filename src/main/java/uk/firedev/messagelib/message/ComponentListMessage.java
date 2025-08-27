@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.firedev.messagelib.ObjectProcessor;
 import uk.firedev.messagelib.Utils;
 import uk.firedev.messagelib.replacer.Replacer;
 
@@ -130,7 +131,7 @@ public class ComponentListMessage extends ComponentMessage {
         if (append instanceof ComponentListMessage listMessage) {
             newMessage.addAll(listMessage.get());
         } else {
-            newMessage.add(ComponentMessage.ROOT.append(Utils.getComponentFromObject(append)));
+            newMessage.add(ComponentMessage.ROOT.append(ObjectProcessor.process(append)));
         }
         return new ComponentListMessage(newMessage, messageType);
     }
@@ -142,7 +143,7 @@ public class ComponentListMessage extends ComponentMessage {
      * @return A new ComponentMessage with the content appended to each line.
      */
     public ComponentListMessage appendEachLine(@NotNull Object append) {
-        Component resolved = Utils.getComponentFromObject(append);
+        Component resolved = ObjectProcessor.process(append);
         List<Component> newMessage = this.message.stream()
             .map(line -> new ComponentSingleMessage(line, messageType).append(resolved).get())
             .toList();
@@ -158,7 +159,7 @@ public class ComponentListMessage extends ComponentMessage {
         if (prepend instanceof ComponentListMessage listMessage) {
             newMessage.addAll(listMessage.get());
         } else {
-            newMessage.add(ComponentMessage.ROOT.append(Utils.getComponentFromObject(prepend)));
+            newMessage.add(ComponentMessage.ROOT.append(ObjectProcessor.process(prepend)));
         }
         newMessage.addAll(message);
         return new ComponentListMessage(newMessage, messageType);
@@ -171,7 +172,7 @@ public class ComponentListMessage extends ComponentMessage {
      * @return A new ComponentMessage with the content prepended to each line.
      */
     public ComponentListMessage prependEachLine(@NotNull Object prepend) {
-        Component resolved = Utils.getComponentFromObject(prepend);
+        Component resolved = ObjectProcessor.process(prepend);
         List<Component> newMessage = this.message.stream()
             .map(line -> new ComponentSingleMessage(line, messageType).prepend(resolved).get())
             .toList();

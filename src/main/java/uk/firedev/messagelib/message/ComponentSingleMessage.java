@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.firedev.messagelib.ObjectProcessor;
 import uk.firedev.messagelib.Utils;
 import uk.firedev.messagelib.config.ConfigLoader;
 import uk.firedev.messagelib.replacer.Replacer;
@@ -113,7 +114,7 @@ public class ComponentSingleMessage extends ComponentMessage {
     @Override
     public ComponentSingleMessage append(@NotNull Object append) {
         return new ComponentSingleMessage(
-            message.append(Utils.getComponentFromObject(append)),
+            message.append(ObjectProcessor.process(append)),
             messageType
         );
     }
@@ -124,7 +125,7 @@ public class ComponentSingleMessage extends ComponentMessage {
     @Override
     public ComponentSingleMessage prepend(@NotNull Object prepend) {
         return new ComponentSingleMessage(
-            Utils.getComponentFromObject(prepend),
+            ObjectProcessor.process(prepend),
             messageType
         ).append(message);
     }

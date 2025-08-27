@@ -3,6 +3,7 @@ package uk.firedev.messagelib.replacer;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.firedev.messagelib.ObjectProcessor;
 import uk.firedev.messagelib.Utils;
 import uk.firedev.messagelib.message.ComponentSingleMessage;
 
@@ -77,7 +78,7 @@ public class Replacer {
     public Component apply(@NotNull Component component) {
         for (Map.Entry<String, Object> entry : replacements.entrySet()) {
             component = component.replaceText(
-                builder -> builder.matchLiteral(entry.getKey()).replacement(Utils.getComponentFromObject(entry.getValue()))
+                builder -> builder.matchLiteral(entry.getKey()).replacement(ObjectProcessor.process(entry.getValue()))
             );
         }
         return component;

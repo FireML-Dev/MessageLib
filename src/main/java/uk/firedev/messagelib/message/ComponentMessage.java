@@ -8,6 +8,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.firedev.messagelib.ObjectProcessor;
 import uk.firedev.messagelib.Utils;
 import uk.firedev.messagelib.config.ConfigLoader;
 import uk.firedev.messagelib.replacer.Replacer;
@@ -51,7 +52,7 @@ public abstract class ComponentMessage {
     public static ComponentListMessage componentMessage(@NotNull List<?> message, @NotNull MessageType messageType) {
         return new ComponentListMessage(
             message.stream()
-                .map(Utils::getComponentFromObject)
+                .map(ObjectProcessor::process)
                 .toList(),
             messageType
         );
