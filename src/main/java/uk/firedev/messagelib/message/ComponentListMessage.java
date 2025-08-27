@@ -233,6 +233,17 @@ public class ComponentListMessage extends ComponentMessage {
         return message.size();
     }
 
+    /**
+     * Converts this ComponentListMessage into a list of ComponentSingleMessages.
+     *
+     * @return A list of ComponentSingleMessages representing each line of the original message.
+     */
+    public List<ComponentSingleMessage> toSingleMessages() {
+        return message.stream()
+            .map(ComponentMessage::componentMessage)
+            .toList();
+    }
+
     // Sending
 
     /**
