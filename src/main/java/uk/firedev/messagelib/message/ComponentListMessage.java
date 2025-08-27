@@ -132,6 +132,20 @@ public class ComponentListMessage extends ComponentMessage {
     }
 
     /**
+     * Appends to each line of the current message.
+     *
+     * @param append The object to append. Explicitly supports {@link Component} and {@link ComponentMessage}. Anything else will be converted to a String and processed.
+     * @return A new ComponentMessage with the content appended to each line.
+     */
+    public ComponentListMessage appendEachLine(@NotNull Object append) {
+        Component resolved = Utils.getComponentFromObject(append);
+        List<Component> newMessage = this.message.stream()
+            .map(line -> ComponentMessage.componentMessage(line).append(resolved).get())
+            .toList();
+        return new ComponentListMessage(newMessage, messageType);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -143,6 +157,20 @@ public class ComponentListMessage extends ComponentMessage {
             newMessage.add(ComponentMessage.ROOT.append(Utils.getComponentFromObject(prepend)));
         }
         newMessage.addAll(message);
+        return new ComponentListMessage(newMessage, messageType);
+    }
+
+    /**
+     * Prepends to each line of the current message.
+     *
+     * @param prepend The object to prepend. Explicitly supports {@link Component} and {@link ComponentMessage}. Anything else will be converted to a String and processed.
+     * @return A new ComponentMessage with the content prepended to each line.
+     */
+    public ComponentListMessage prependEachLine(@NotNull Object prepend) {
+        Component resolved = Utils.getComponentFromObject(prepend);
+        List<Component> newMessage = this.message.stream()
+            .map(line -> ComponentMessage.componentMessage(line).prepend(resolved).get())
+            .toList();
         return new ComponentListMessage(newMessage, messageType);
     }
 
