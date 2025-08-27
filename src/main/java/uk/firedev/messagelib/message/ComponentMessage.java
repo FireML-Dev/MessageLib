@@ -27,6 +27,8 @@ public abstract class ComponentMessage {
                 .build()
         );
 
+    protected ComponentMessage() {}
+
     // Single Messages
 
     public static ComponentSingleMessage componentMessage(@NotNull Component message, @NotNull MessageType messageType) {
@@ -72,6 +74,36 @@ public abstract class ComponentMessage {
 
     public static ComponentListMessage componentMessage(@NotNull List<?> message) {
         return componentMessage(message, MessageType.CHAT);
+    }
+
+    /**
+     * Resolves a ComponentListMessage from an abstract ComponentMessage.
+     * @param message The message to resolve.
+     * @return The resolved ComponentListMessage.
+     */
+    public static ComponentListMessage componentListMessage(@NotNull ComponentMessage message) {
+        if (message instanceof ComponentListMessage listMessage) {
+            return listMessage;
+        } else if (message instanceof ComponentSingleMessage singleMessage) {
+            return singleMessage.toListMessage();
+        } else {
+            throw new IllegalArgumentException("Invalid ComponentMessage instance provided.");
+        }
+    }
+
+    /**
+     * Resolves a ComponentSingleMessage from an abstract ComponentMessage.
+     * @param message The message to resolve.
+     * @return The resolved ComponentSingleMessage.
+     */
+    public static ComponentSingleMessage componentSingleMessage(@NotNull ComponentMessage message) {
+        if (message instanceof ComponentListMessage listMessage) {
+            return listMessage.toSingleMessage();
+        } else if (message instanceof ComponentSingleMessage singleMessage) {
+            return singleMessage;
+        } else {
+            throw new IllegalArgumentException("Invalid ComponentMessage instance provided.");
+        }
     }
 
     // Ambiguous Messages - Could be single or list.
