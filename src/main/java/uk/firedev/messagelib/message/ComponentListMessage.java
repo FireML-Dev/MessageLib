@@ -29,7 +29,7 @@ public class ComponentListMessage extends ComponentMessage {
     private final MessageType messageType;
 
     protected ComponentListMessage(@NotNull List<Component> message, @NotNull MessageType messageType) {
-        this.message.addAll(message);
+        message.stream().map(ROOT::append).forEach(this.message::add);
         this.messageType = messageType;
     }
 
