@@ -3,6 +3,7 @@ package uk.firedev.messagelib.message;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -114,7 +115,7 @@ public class ComponentSingleMessage extends ComponentMessage {
     @Override
     public ComponentSingleMessage append(@NotNull Object append) {
         return new ComponentSingleMessage(
-            message.append(ObjectProcessor.process(append)),
+            message.append(Component.join(JoinConfiguration.newlines(), ObjectProcessor.process(append))),
             messageType
         );
     }
@@ -125,7 +126,7 @@ public class ComponentSingleMessage extends ComponentMessage {
     @Override
     public ComponentSingleMessage prepend(@NotNull Object prepend) {
         return new ComponentSingleMessage(
-            ObjectProcessor.process(prepend),
+            Component.join(JoinConfiguration.newlines(),ObjectProcessor.process(prepend)),
             messageType
         ).append(message);
     }

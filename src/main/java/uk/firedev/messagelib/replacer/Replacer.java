@@ -1,6 +1,7 @@
 package uk.firedev.messagelib.replacer;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.ObjectProcessor;
@@ -77,8 +78,9 @@ public class Replacer {
      */
     public Component apply(@NotNull Component component) {
         for (Map.Entry<String, Object> entry : replacements.entrySet()) {
+            Component replacement = Component.join(JoinConfiguration.newlines(), ObjectProcessor.process(entry.getValue()));
             component = component.replaceText(
-                builder -> builder.matchLiteral(entry.getKey()).replacement(ObjectProcessor.process(entry.getValue()))
+                builder -> builder.matchLiteral(entry.getKey()).replacement(replacement)
             );
         }
         return component;

@@ -11,6 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * A class for processing different classes into Components.
+ * <p>
+ * This returns a list to be compatible with list messages.
+ */
 public class ObjectProcessor {
 
     private static final List<Processor<?>> PROCESSORS = new ArrayList<>();
@@ -18,36 +23,41 @@ public class ObjectProcessor {
     static {
         registerProcessor(
             Component.class,
-            component -> component
+            List::of
         );
         registerProcessor(
             ComponentSingleMessage.class,
-            ComponentSingleMessage::get
+            singleMessage -> List.of(singleMessage.get())
         );
         registerProcessor(
             ComponentListMessage.class,
-            listMessage -> Component.join(JoinConfiguration.newlines(), listMessage.get())
+            ComponentListMessage::get
         );
     }
 
     /**
-     * Processes an object into a Component using registered processors.
+     * Processes an object into a Component list using registered processors.
      * @param object The object to process.
      * @return The processed object.
      */
-    public static @NotNull Component process(@NotNull Object object) {
+    public static @NotNull List<Component> process(@NotNull Object object) {
         for (Processor<?> processor : PROCESSORS) {
-            Component component = processor.process(object);
-            if (component != null) {
-                return component;
+            List<Component> components = processor.process(object);
+            if (components != null) {
+                return components;
             }
         }
 
         // If no processor matches, toString the object.
-        return Utils.processString(object.toString());
+        return List.of(Utils.processString(object.toString()));
     }
 
-    public static <T> void registerProcessor(@NotNull Class<T> clazz, @NotNull Function<T, Component> processor) {
+    /**
+     * Registers a processor for the provided class.
+     * @param clazz The class to process.
+     * @param processor The component provider.
+     */
+    public static <T> void registerProcessor(@NotNull Class<T> clazz, @NotNull Function<T, List<Component>> processor) {
         PROCESSORS.add(
             new Processor<>(clazz, processor)
         );
@@ -56,14 +66,14 @@ public class ObjectProcessor {
     private static class Processor<T> {
 
         private final Class<T> clazz;
-        private final Function<T, Component> processor;
+        private final Function<T, List<Component>> processor;
 
-        public Processor(@NotNull Class<T> clazz, @NotNull Function<T, Component> processor) {
+        public Processor(@NotNull Class<T> clazz, @NotNull Function<T, List<Component>> processor) {
             this.clazz = clazz;
             this.processor = processor;
         }
 
-        public @Nullable Component process(@NotNull Object object) {
+        public @Nullable List<Component> process(@NotNull Object object) {
             if (clazz.isInstance(object)) {
                 return processor.apply(clazz.cast(object));
             }

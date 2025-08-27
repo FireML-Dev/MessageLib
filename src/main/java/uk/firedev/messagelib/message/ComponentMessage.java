@@ -2,6 +2,7 @@ package uk.firedev.messagelib.message;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -36,6 +37,17 @@ public abstract class ComponentMessage {
         return componentMessage(message, MessageType.CHAT);
     }
 
+    public static ComponentSingleMessage componentMessage(@NotNull Object object, @NotNull MessageType messageType) {
+        return componentMessage(
+            Component.join(JoinConfiguration.newlines(), ObjectProcessor.process(object)),
+            messageType
+        );
+    }
+
+    public static ComponentSingleMessage componentMessage(@NotNull Object object) {
+        return componentMessage(object, MessageType.CHAT);
+    }
+
     public static ComponentSingleMessage componentMessage(@NotNull String message, @NotNull MessageType messageType) {
         return componentMessage(
             Utils.processString(message),
@@ -52,7 +64,7 @@ public abstract class ComponentMessage {
     public static ComponentListMessage componentMessage(@NotNull List<?> message, @NotNull MessageType messageType) {
         return new ComponentListMessage(
             message.stream()
-                .map(ObjectProcessor::process)
+                .flatMap(object -> ObjectProcessor.process(object).stream())
                 .toList(),
             messageType
         );

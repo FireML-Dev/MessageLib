@@ -128,11 +128,11 @@ public class ComponentListMessage extends ComponentMessage {
     @Override
     public ComponentListMessage append(@NotNull Object append) {
         List<Component> newMessage = new ArrayList<>(message);
-        if (append instanceof ComponentListMessage listMessage) {
-            newMessage.addAll(listMessage.get());
-        } else {
-            newMessage.add(ComponentMessage.ROOT.append(ObjectProcessor.process(append)));
-        }
+        newMessage.addAll(
+            ObjectProcessor.process(append).stream()
+                .map(ROOT::append)
+                .toList()
+        );
         return new ComponentListMessage(newMessage, messageType);
     }
 
@@ -143,7 +143,7 @@ public class ComponentListMessage extends ComponentMessage {
      * @return A new ComponentMessage with the content appended to each line.
      */
     public ComponentListMessage appendEachLine(@NotNull Object append) {
-        Component resolved = ObjectProcessor.process(append);
+        Component resolved = Component.join(JoinConfiguration.newlines(), ObjectProcessor.process(append));
         List<Component> newMessage = this.message.stream()
             .map(line -> new ComponentSingleMessage(line, messageType).append(resolved).get())
             .toList();
@@ -155,12 +155,11 @@ public class ComponentListMessage extends ComponentMessage {
      */
     @Override
     public ComponentListMessage prepend(@NotNull Object prepend) {
-        List<Component> newMessage = new ArrayList<>();
-        if (prepend instanceof ComponentListMessage listMessage) {
-            newMessage.addAll(listMessage.get());
-        } else {
-            newMessage.add(ComponentMessage.ROOT.append(ObjectProcessor.process(prepend)));
-        }
+        List<Component> newMessage = new ArrayList<>(
+            ObjectProcessor.process(prepend).stream()
+                .map(ROOT::append)
+                .toList()
+        );
         newMessage.addAll(message);
         return new ComponentListMessage(newMessage, messageType);
     }
@@ -172,7 +171,7 @@ public class ComponentListMessage extends ComponentMessage {
      * @return A new ComponentMessage with the content prepended to each line.
      */
     public ComponentListMessage prependEachLine(@NotNull Object prepend) {
-        Component resolved = ObjectProcessor.process(prepend);
+        Component resolved = Component.join(JoinConfiguration.newlines(), ObjectProcessor.process(prepend));
         List<Component> newMessage = this.message.stream()
             .map(line -> new ComponentSingleMessage(line, messageType).prepend(resolved).get())
             .toList();
