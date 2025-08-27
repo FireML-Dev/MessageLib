@@ -46,7 +46,7 @@ public class ComponentListMessage extends ComponentMessage {
      * @return The underlying message.
      */
     public @NotNull List<Component> get() {
-        return message;
+        return new ArrayList<>(message);
     }
 
     /**
