@@ -2,6 +2,7 @@ package uk.firedev.messagelib.message;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -240,8 +241,20 @@ public class ComponentListMessage extends ComponentMessage {
      */
     public List<ComponentSingleMessage> toSingleMessages() {
         return message.stream()
-            .map(ComponentMessage::componentMessage)
+            .map(line -> new ComponentSingleMessage(line, this.messageType))
             .toList();
+    }
+
+    /**
+     * Converts this ComponentListMessage into a single ComponentSingleMessage, joining all lines with newlines.
+     *
+     * @return A ComponentSingleMessage representing the original message.
+     */
+    public ComponentSingleMessage toSingleMessage() {
+        return new ComponentSingleMessage(
+            Component.join(JoinConfiguration.newlines(), this.message),
+            this.messageType
+        );
     }
 
     // Sending
