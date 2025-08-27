@@ -17,6 +17,9 @@ import uk.firedev.messagelib.replacer.Replacer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 // NEEDS TO BE IMMUTABLE - any change makes a new instance.
 public class ComponentListMessage extends ComponentMessage {
@@ -255,6 +258,21 @@ public class ComponentListMessage extends ComponentMessage {
             Component.join(JoinConfiguration.newlines(), this.message),
             this.messageType
         );
+    }
+
+    /**
+     * Edits each line of the current message using the provided editor function.
+     *
+     * @param editor A function that takes a ComponentSingleMessage and returns a modified ComponentSingleMessage.
+     * @return A new ComponentListMessage with each line edited.
+     */
+    public ComponentListMessage editAllLines(@NotNull Function<ComponentSingleMessage, ComponentSingleMessage> editor) {
+        List<Component> newMessage = message.stream()
+            .map(line -> editor.apply(new ComponentSingleMessage(line, this.messageType)))
+            .filter(Objects::nonNull)
+            .map(ComponentSingleMessage::get)
+            .toList();
+        return new ComponentListMessage(newMessage, this.messageType);
     }
 
     // Sending
