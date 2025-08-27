@@ -140,7 +140,7 @@ public abstract class ComponentMessage {
      * @param replacer The Replacer to apply.
      * @return A new ComponentMessage with the replacements made.
      */
-    public abstract ComponentMessage replace(@NotNull Replacer replacer);
+    public abstract ComponentMessage replace(@Nullable Replacer replacer);
 
     /**
      * Parses PlaceholderAPI placeholders in the message for the specified player.

@@ -200,7 +200,10 @@ public class ComponentListMessage extends ComponentMessage {
      * {@inheritDoc}
      */
     @Override
-    public ComponentListMessage replace(@NotNull Replacer replacer) {
+    public ComponentListMessage replace(@Nullable Replacer replacer) {
+        if (replacer == null) {
+            return this;
+        }
         return new ComponentListMessage(replacer.apply(message), messageType);
     }
 

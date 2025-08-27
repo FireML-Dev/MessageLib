@@ -153,7 +153,10 @@ public class ComponentSingleMessage extends ComponentMessage {
      * {@inheritDoc}
      */
     @Override
-    public ComponentSingleMessage replace(@NotNull Replacer replacer) {
+    public ComponentSingleMessage replace(@Nullable Replacer replacer) {
+        if (replacer == null) {
+            return this;
+        }
         return new ComponentSingleMessage(replacer.apply(message), messageType);
     }
 
