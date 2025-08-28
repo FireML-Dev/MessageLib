@@ -252,18 +252,6 @@ public class ComponentListMessage extends ComponentMessage {
     }
 
     /**
-     * Converts this ComponentListMessage into a single ComponentSingleMessage, joining all lines with newlines.
-     *
-     * @return A ComponentSingleMessage representing the original message.
-     */
-    public ComponentSingleMessage toSingleMessage() {
-        return new ComponentSingleMessage(
-            Component.join(JoinConfiguration.newlines(), this.message),
-            this.messageType
-        );
-    }
-
-    /**
      * Edits the current message using the provided editor function.
      *
      * @param editor A function that takes a List of Components and returns a modified List of Components.

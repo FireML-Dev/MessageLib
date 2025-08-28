@@ -209,15 +209,6 @@ public class ComponentSingleMessage extends ComponentMessage {
     }
 
     /**
-     * Converts this ComponentSingleMessage into a ComponentListMessage.
-     *
-     * @return A ComponentListMessage representing the original message.
-     */
-    public ComponentListMessage toListMessage() {
-        return new ComponentListMessage(List.of(this.message), this.messageType);
-    }
-
-    /**
      * Edits the underlying component using the provided editor function.
      * The editor function takes the current component as input and returns a modified component.
      *

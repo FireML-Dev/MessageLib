@@ -76,36 +76,6 @@ public abstract class ComponentMessage {
         return componentMessage(message, MessageType.CHAT);
     }
 
-    /**
-     * Resolves a ComponentListMessage from an abstract ComponentMessage.
-     * @param message The message to resolve.
-     * @return The resolved ComponentListMessage.
-     */
-    public static ComponentListMessage componentListMessage(@NotNull ComponentMessage message) {
-        if (message instanceof ComponentListMessage listMessage) {
-            return listMessage;
-        } else if (message instanceof ComponentSingleMessage singleMessage) {
-            return singleMessage.toListMessage();
-        } else {
-            throw new IllegalArgumentException("Invalid ComponentMessage instance provided.");
-        }
-    }
-
-    /**
-     * Resolves a ComponentSingleMessage from an abstract ComponentMessage.
-     * @param message The message to resolve.
-     * @return The resolved ComponentSingleMessage.
-     */
-    public static ComponentSingleMessage componentSingleMessage(@NotNull ComponentMessage message) {
-        if (message instanceof ComponentListMessage listMessage) {
-            return listMessage.toSingleMessage();
-        } else if (message instanceof ComponentSingleMessage singleMessage) {
-            return singleMessage;
-        } else {
-            throw new IllegalArgumentException("Invalid ComponentMessage instance provided.");
-        }
-    }
-
     // Ambiguous Messages - Could be single or list.
 
     public static ComponentMessage componentMessage(@NotNull ConfigLoader<?> loader, @NotNull String path) {
@@ -113,6 +83,38 @@ public abstract class ComponentMessage {
     }
 
     // Abstract Things
+
+    /**
+     * Turns this ComponentMessage into a ComponentSingleMessage.
+     */
+    public ComponentSingleMessage toSingleMessage() {
+        if (this instanceof ComponentSingleMessage singleMessage) {
+            return singleMessage;
+        } else if (this instanceof ComponentListMessage listMessage) {
+            return new ComponentSingleMessage(
+                Component.join(JoinConfiguration.newlines(), listMessage.get()),
+                listMessage.messageType()
+            );
+        } else {
+            throw new IllegalArgumentException("Invalid ComponentMessage instance provided.");
+        }
+    }
+
+    /**
+     * Turns this ComponentMessage into a ComponentListMessage.
+     */
+    public ComponentListMessage toListMessage() {
+        if (this instanceof ComponentSingleMessage singleMessage) {
+            return new ComponentListMessage(
+                List.of(singleMessage.get()),
+                singleMessage.messageType()
+            );
+        } else if (this instanceof ComponentListMessage listMessage) {
+            return listMessage;
+        } else {
+            throw new IllegalArgumentException("Invalid ComponentMessage instance provided.");
+        }
+    }
 
     /**
      * Creates a copy of this ComponentMessage.
