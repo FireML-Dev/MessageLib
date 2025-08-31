@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 // NEEDS TO BE IMMUTABLE - any change makes a new instance.
@@ -188,12 +187,37 @@ public class ComponentListMessage extends ComponentMessage {
     }
 
     /**
+     * Replaces all instances of the specified placeholder with the specified replacement
+     * <p>
+     * If a placeholder is found on any line, the replacement list will be inserted in its place.
+     * @param placeholder The placeholder to replace.
+     * @param replacement The replacement object. Explicitly supports {@link Component} and {@link ComponentMessage}. Anything else will be converted to a String and processed.
+     * @return A new ComponentMessage with the replacements made.
+     */
+    public ComponentListMessage replaceWithListInsertion(@NotNull String placeholder, @Nullable Object replacement) {
+        Replacer replacer = Replacer.replacer().addReplacement(placeholder, replacement);
+        return new ComponentListMessage(replacer.applyWithListInsertion(message), messageType);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public ComponentListMessage replace(@NotNull Map<String, ?> replacements) {
         Replacer replacer = Replacer.replacer().addReplacements(replacements);
         return new ComponentListMessage(replacer.apply(message), messageType);
+    }
+
+    /**
+     * Replaces all instances of the specified placeholders with the specified replacements.
+     * <p>
+     * If a placeholder is found on any line, the replacement list will be inserted in its place.
+     * @param replacements A map of placeholders to replacements. Explicitly supports {@link Component} and {@link ComponentSingleMessage} as values. Anything else will be converted to a String and processed.
+     * @return A new ComponentMessage with the replacements made.
+     */
+    public ComponentListMessage replaceWithListInsertion(@NotNull Map<String, ?> replacements) {
+        Replacer replacer = Replacer.replacer().addReplacements(replacements);
+        return new ComponentListMessage(replacer.applyWithListInsertion(message), messageType);
     }
 
     /**
@@ -205,6 +229,20 @@ public class ComponentListMessage extends ComponentMessage {
             return this;
         }
         return new ComponentListMessage(replacer.apply(message), messageType);
+    }
+
+    /**
+     * Applies the specified Replacer to the message.
+     * <p>
+     * If a placeholder is found on any line, the replacement list will be inserted in its place.
+     * @param replacer The Replacer to apply.
+     * @return A new ComponentMessage with the replacements made.
+     */
+    public ComponentListMessage replaceWithListInsertion(@Nullable Replacer replacer) {
+        if (replacer == null) {
+            return this;
+        }
+        return new ComponentListMessage(replacer.applyWithListInsertion(message), messageType);
     }
 
     /**

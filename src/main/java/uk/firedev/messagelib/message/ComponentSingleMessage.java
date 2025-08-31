@@ -1,12 +1,8 @@
 package uk.firedev.messagelib.message;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -17,13 +13,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.ObjectProcessor;
 import uk.firedev.messagelib.Utils;
-import uk.firedev.messagelib.config.ConfigLoader;
 import uk.firedev.messagelib.replacer.Replacer;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.regex.Matcher;
 
 // NEEDS TO BE IMMUTABLE - any change makes a new instance.
 public class ComponentSingleMessage extends ComponentMessage {

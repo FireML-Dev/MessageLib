@@ -1,7 +1,6 @@
 package uk.firedev.messagelib;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.JoinConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.message.ComponentListMessage;

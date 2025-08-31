@@ -5,9 +5,10 @@ import net.kyori.adventure.text.JoinConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.ObjectProcessor;
-import uk.firedev.messagelib.Utils;
+import uk.firedev.messagelib.message.ComponentMessage;
 import uk.firedev.messagelib.message.ComponentSingleMessage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +94,33 @@ public class Replacer {
      */
     public List<Component> apply(@NotNull List<Component> components) {
         return components.stream().map(this::apply).toList();
+    }
+
+    /**
+     * Applies the replacements to a list of Components.
+     * <p>
+     * If a variable is found, the replacement list is inserted in place of the variable's entry.
+     * @param components The list of components to apply the replacements to.
+     * @return The modified list of components.
+     */
+    // TODO potentially clean up at some point?
+    public List<Component> applyWithListInsertion(@NotNull List<Component> components) {
+        List<Component> newList = new ArrayList<>();
+        for (Component component : components) {
+            boolean replaced = false;
+            for (Map.Entry<String, Object> entry : replacements.entrySet()) {
+                ComponentSingleMessage single = ComponentMessage.componentMessage(component);
+                if (single.containsString(entry.getKey())) {
+                    newList.addAll(ObjectProcessor.process(entry.getValue()));
+                    replaced = true;
+                    break;
+                }
+            }
+            if (!replaced) {
+                newList.add(component);
+            }
+        }
+        return newList;
     }
 
 }
