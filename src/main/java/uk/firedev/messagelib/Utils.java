@@ -18,6 +18,9 @@ import java.util.regex.Matcher;
 
 public class Utils {
 
+    // Keep empty components after deserialization.
+    public static final MiniMessage MINI_MESSAGE = MiniMessage.builder().postProcessor(component -> component).build();
+
     public static boolean isLegacy(@NotNull String message) {
         if (message.isEmpty()) {
             return false;
@@ -36,7 +39,7 @@ public class Utils {
             String processedMessage = ChatColor.translateAlternateColorCodes('&', message);
             return LegacyComponentSerializer.legacySection().deserialize(processedMessage);
         } else {
-            return MiniMessage.miniMessage().deserialize(message);
+            return MINI_MESSAGE.deserialize(message);
         }
     }
 
