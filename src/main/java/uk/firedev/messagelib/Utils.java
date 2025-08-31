@@ -18,8 +18,13 @@ import java.util.regex.Matcher;
 
 public class Utils {
 
-    // Keep empty components after deserialization.
     public static final MiniMessage MINI_MESSAGE = MiniMessage.builder().postProcessor(component -> component).build();
+    public static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.builder()
+        .useUnusualXRepeatedCharacterHexFormat()
+        .character('&')
+        .hexColors()
+        .useUnusualXRepeatedCharacterHexFormat()
+        .build();
 
     public static boolean isLegacy(@NotNull String message) {
         if (message.isEmpty()) {
@@ -29,15 +34,12 @@ public class Utils {
         return MiniMessage.miniMessage().stripTags(message).equals(message);
     }
 
-    // Suppressing deprecation warnings as we use Spigot's ChatColor.
-    @SuppressWarnings("deprecation")
     public static @NotNull Component processString(@NotNull String message) {
         if (message.isEmpty()) {
             return Component.empty();
         }
         if (isLegacy(message)) {
-            String processedMessage = ChatColor.translateAlternateColorCodes('&', message);
-            return LegacyComponentSerializer.legacySection().deserialize(processedMessage);
+            return LEGACY_COMPONENT_SERIALIZER.deserialize(message);
         } else {
             return MINI_MESSAGE.deserialize(message);
         }
