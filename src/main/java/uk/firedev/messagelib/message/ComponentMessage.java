@@ -82,6 +82,16 @@ public abstract class ComponentMessage {
         return Utils.getFromConfig(loader, path);
     }
 
+    public static ComponentMessage componentMessage(@NotNull ConfigLoader<?> loader, @NotNull String path, @NotNull String def) {
+        ComponentMessage message = Utils.getFromConfig(loader, path);
+        return message == null ? componentMessage(def) : message;
+    }
+
+    public static ComponentMessage componentMessage(@NotNull ConfigLoader<?> loader, @NotNull String path, @NotNull Component def) {
+        ComponentMessage message = Utils.getFromConfig(loader, path);
+        return message == null ? componentMessage(def) : message;
+    }
+
     // Abstract Things
 
     /**
