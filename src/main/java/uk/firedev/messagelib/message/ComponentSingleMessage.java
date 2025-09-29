@@ -227,7 +227,7 @@ public class ComponentSingleMessage extends ComponentMessage {
      * {@inheritDoc}
      */
     @Override
-    public void send(@NotNull List<Audience> audienceList) {
+    public void send(@NotNull List<? extends Audience> audienceList) {
         audienceList.forEach(this::send);
     }
 

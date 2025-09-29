@@ -219,7 +219,7 @@ public abstract class ComponentMessage {
      *
      * @param audienceList The list of Audiences to send the message to. If the list is empty, nothing happens.
      */
-    public abstract void send(@NotNull List<Audience> audienceList);
+    public abstract void send(@NotNull List<? extends Audience> audienceList);
 
     /**
      * Broadcasts the message to all players on the server.
