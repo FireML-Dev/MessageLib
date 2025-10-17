@@ -2,32 +2,29 @@ package uk.firedev.messagelib.message;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.BiConsumer;
+
 public enum MessageType {
-    CHAT,
-    ACTION_BAR,
-    TITLE,
-    SUBTITLE;
+    CHAT(Audience::sendMessage),
+    ACTION_BAR(Audience::sendActionBar),
+    TITLE((audience, component) -> audience.sendTitlePart(TitlePart.TITLE, component)),
+    SUBTITLE((audience, component) -> audience.sendTitlePart(TitlePart.SUBTITLE, component));
+
+    private final BiConsumer<Audience, Component> consumer;
+
+    MessageType(@NotNull BiConsumer<Audience, Component> consumer) {
+        this.consumer = consumer;
+    }
 
     public void send(@Nullable Audience audience, @NotNull Component message) {
         if (audience == null) {
             return;
         }
-        switch (this) {
-            case CHAT -> audience.sendMessage(message);
-            case ACTION_BAR -> audience.sendActionBar(message);
-            case TITLE -> {
-                Title title = Title.title(message, Component.empty());
-                audience.showTitle(title);
-            }
-            case SUBTITLE -> {
-                Title title = Title.title(Component.empty(), message);
-                audience.showTitle(title);
-            }
-        }
+        consumer.accept(audience, message);
     }
 
     /**
