@@ -337,6 +337,16 @@ public class ComponentListMessage extends ComponentMessage {
      * {@inheritDoc}
      */
     @Override
+    public void send(@Nullable Audience... audiences) {
+        for (Audience audience : audiences) {
+            send(audience);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void broadcast() {
         message.forEach(Bukkit::broadcast);
     }

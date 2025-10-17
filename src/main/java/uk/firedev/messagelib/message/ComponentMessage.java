@@ -222,6 +222,13 @@ public abstract class ComponentMessage {
     public abstract void send(@NotNull List<? extends Audience> audienceList);
 
     /**
+     * Sends the message to an array of Audiences.
+     *
+     * @param audiences The array of Audiences to send the message to. If the array is empty or null, nothing happens.
+     */
+    public abstract void send(@Nullable Audience... audiences);
+
+    /**
      * Broadcasts the message to all players on the server.
      */
     public abstract void broadcast();
