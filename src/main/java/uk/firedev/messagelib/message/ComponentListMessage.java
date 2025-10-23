@@ -26,6 +26,7 @@ public class ComponentListMessage extends ComponentMessage {
 
     private final List<Component> message = new ArrayList<>();
     private final MessageType messageType;
+    private MiniMessage miniMessage = Utils.MINI_MESSAGE;
 
     protected ComponentListMessage(@NotNull List<Component> message, @NotNull MessageType messageType) {
         message.stream().map(ROOT::append).forEach(this.message::add);
@@ -88,11 +89,29 @@ public class ComponentListMessage extends ComponentMessage {
      */
     public @NotNull List<String> getAsMiniMessage() {
         return message.stream()
-            .map(component -> MiniMessage.miniMessage().serialize(component))
+            .map(component -> miniMessage.serialize(component))
             .toList();
     }
 
     // Class Methods
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull MiniMessage miniMessage() {
+        return miniMessage;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ComponentListMessage miniMessage(@NotNull MiniMessage miniMessage) {
+        ComponentListMessage newMessage = new ComponentListMessage(message, messageType);
+        newMessage.miniMessage = miniMessage;
+        return newMessage;
+    }
 
     /**
      * {@inheritDoc}

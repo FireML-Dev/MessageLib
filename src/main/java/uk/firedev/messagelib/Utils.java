@@ -34,14 +34,29 @@ public class Utils {
         return MiniMessage.miniMessage().stripTags(message).equals(message);
     }
 
+    /**
+     * Processes a String into a Component, detecting whether it's Legacy or MiniMessage format.
+     * @param message The message to process.
+     * @return The processed Component.
+     */
     public static @NotNull Component processString(@NotNull String message) {
+        return processString(message, MINI_MESSAGE);
+    }
+
+    /**
+     * Processes a String into a Component, detecting whether it's Legacy or MiniMessage format.
+     * @param message The message to process.
+     * @param miniMessage The MiniMessage instance to use for deserialization.
+     * @return The processed Component.
+     */
+    public static @NotNull Component processString(@NotNull String message, @NotNull MiniMessage miniMessage) {
         if (message.isEmpty()) {
             return Component.empty();
         }
         if (isLegacy(message)) {
             return LEGACY_COMPONENT_SERIALIZER.deserialize(message);
         } else {
-            return MINI_MESSAGE.deserialize(message);
+            return miniMessage.deserialize(message);
         }
     }
 

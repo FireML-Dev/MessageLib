@@ -24,6 +24,7 @@ public class ComponentSingleMessage extends ComponentMessage {
 
     private final Component message;
     private final MessageType messageType;
+    private MiniMessage miniMessage = Utils.MINI_MESSAGE;
 
     protected ComponentSingleMessage(@NotNull Component message, @NotNull MessageType messageType) {
         this.message = ComponentMessage.ROOT.append(message);
@@ -78,6 +79,24 @@ public class ComponentSingleMessage extends ComponentMessage {
     }
 
     // Class Methods
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public @NotNull MiniMessage miniMessage() {
+        return miniMessage;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ComponentSingleMessage miniMessage(@NotNull MiniMessage miniMessage) {
+        ComponentSingleMessage newMessage = new ComponentSingleMessage(message, messageType);
+        newMessage.miniMessage = miniMessage;
+        return newMessage;
+    }
 
     /**
      * {@inheritDoc}

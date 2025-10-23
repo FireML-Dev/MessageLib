@@ -1,6 +1,7 @@
 package uk.firedev.messagelib;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.message.ComponentListMessage;
@@ -40,7 +41,18 @@ public class ObjectProcessor {
      * @return The processed object.
      */
     public static @NotNull List<Component> process(@NotNull Object object) {
+        return process(object, Utils.MINI_MESSAGE);
+    }
+
+    /**
+     * Processes an object into a Component list using registered processors.
+     * @param object The object to process.
+     * @param miniMessage The MiniMessage instance to use for deserialization.
+     * @return The processed object.
+     */
+    public static @NotNull List<Component> process(@NotNull Object object, @NotNull MiniMessage miniMessage) {
         for (Processor<?> processor : PROCESSORS) {
+            // We cannot pass the MiniMessage instance here.
             List<Component> components = processor.process(object);
             if (components != null) {
                 return components;
@@ -48,7 +60,7 @@ public class ObjectProcessor {
         }
 
         // If no processor matches, toString the object.
-        return List.of(Utils.processString(object.toString()));
+        return List.of(Utils.processString(object.toString(), miniMessage));
     }
 
     /**

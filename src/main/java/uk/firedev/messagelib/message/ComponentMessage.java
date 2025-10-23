@@ -6,6 +6,7 @@ import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,8 +58,19 @@ public abstract class ComponentMessage {
         );
     }
 
+    public static ComponentSingleMessage componentMessage(@NotNull String message, @NotNull MessageType messageType, @NotNull MiniMessage miniMessage) {
+        return componentMessage(
+            Utils.processString(message, miniMessage),
+            messageType
+        );
+    }
+
     public static ComponentSingleMessage componentMessage(@NotNull String message) {
         return componentMessage(message, MessageType.CHAT);
+    }
+
+    public static ComponentSingleMessage componentMessage(@NotNull String message, @NotNull MiniMessage miniMessage) {
+        return componentMessage(message, MessageType.CHAT, miniMessage);
     }
 
     // List Messages
@@ -72,8 +84,21 @@ public abstract class ComponentMessage {
         );
     }
 
+    public static ComponentListMessage componentMessage(@NotNull List<?> message, @NotNull MessageType messageType, @NotNull MiniMessage miniMessage) {
+        return new ComponentListMessage(
+            message.stream()
+                .flatMap(object -> ObjectProcessor.process(object, miniMessage).stream())
+                .toList(),
+            messageType
+        );
+    }
+
     public static ComponentListMessage componentMessage(@NotNull List<?> message) {
         return componentMessage(message, MessageType.CHAT);
+    }
+
+    public static ComponentListMessage componentMessage(@NotNull List<?> message, @NotNull MiniMessage miniMessage) {
+        return componentMessage(message, MessageType.CHAT, miniMessage);
     }
 
     // Ambiguous Messages - Could be single or list.
@@ -125,6 +150,19 @@ public abstract class ComponentMessage {
             throw new IllegalArgumentException("Invalid ComponentMessage instance provided.");
         }
     }
+
+    /**
+     * Gets the MiniMessage instance used to parse strings in this ComponentMessage.
+     * @return The MiniMessage instance.
+     */
+    public abstract @NotNull MiniMessage miniMessage();
+
+    /**
+     * Overrides the MiniMessage instance used to parse strings in this ComponentMessage.
+     * @param miniMessage The MiniMessage instance to use.
+     * @return A new ComponentMessage with the updated MiniMessage instance.
+     */
+    public abstract ComponentMessage miniMessage(@NotNull MiniMessage miniMessage);
 
     /**
      * Creates a copy of this ComponentMessage.
