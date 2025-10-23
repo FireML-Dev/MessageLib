@@ -26,8 +26,17 @@ public class Utils {
         .useUnusualXRepeatedCharacterHexFormat()
         .build();
 
+    private static boolean enableLegacy = true;
+
+    public static void allowLegacyMessages(boolean allow) {
+        enableLegacy = allow;
+    }
+
     public static boolean isLegacy(@NotNull String message) {
         if (message.isEmpty()) {
+            return false;
+        }
+        if (!enableLegacy) {
             return false;
         }
         // If no MiniMessage tags get stripped, the message is assumed to be legacy.
