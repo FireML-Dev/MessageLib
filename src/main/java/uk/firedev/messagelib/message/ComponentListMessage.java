@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.firedev.messagelib.MessageLibSettings;
 import uk.firedev.messagelib.ObjectProcessor;
 import uk.firedev.messagelib.Utils;
 import uk.firedev.messagelib.replacer.Replacer;
@@ -145,6 +146,9 @@ public class ComponentListMessage extends ComponentMessage {
      */
     @Override
     public ComponentListMessage append(@NotNull Object append) {
+        if (!MessageLibSettings.get().isAllowEmptyAppend() && isEmpty()) {
+            return this;
+        }
         List<Component> newMessage = new ArrayList<>(message);
         newMessage.addAll(
             ObjectProcessor.process(append).stream()
@@ -161,6 +165,9 @@ public class ComponentListMessage extends ComponentMessage {
      * @return A new ComponentMessage with the content appended to each line.
      */
     public ComponentListMessage appendEachLine(@NotNull Object append) {
+        if (!MessageLibSettings.get().isAllowEmptyAppend() && isEmpty()) {
+            return this;
+        }
         Component resolved = Component.join(JoinConfiguration.newlines(), ObjectProcessor.process(append));
         List<Component> newMessage = this.message.stream()
             .map(line -> new ComponentSingleMessage(line, messageType).append(resolved).get())
@@ -173,6 +180,9 @@ public class ComponentListMessage extends ComponentMessage {
      */
     @Override
     public ComponentListMessage prepend(@NotNull Object prepend) {
+        if (!MessageLibSettings.get().isAllowEmptyPrepend() && isEmpty()) {
+            return this;
+        }
         List<Component> newMessage = new ArrayList<>(
             ObjectProcessor.process(prepend).stream()
                 .map(ROOT::append)
@@ -189,6 +199,9 @@ public class ComponentListMessage extends ComponentMessage {
      * @return A new ComponentMessage with the content prepended to each line.
      */
     public ComponentListMessage prependEachLine(@NotNull Object prepend) {
+        if (!MessageLibSettings.get().isAllowEmptyPrepend() && isEmpty()) {
+            return this;
+        }
         Component resolved = Component.join(JoinConfiguration.newlines(), ObjectProcessor.process(prepend));
         List<Component> newMessage = this.message.stream()
             .map(line -> new ComponentSingleMessage(line, messageType).prepend(resolved).get())

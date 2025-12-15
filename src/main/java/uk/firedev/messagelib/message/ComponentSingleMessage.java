@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import uk.firedev.messagelib.MessageLibSettings;
 import uk.firedev.messagelib.ObjectProcessor;
 import uk.firedev.messagelib.Utils;
 import uk.firedev.messagelib.replacer.Replacer;
@@ -127,6 +128,9 @@ public class ComponentSingleMessage extends ComponentMessage {
      */
     @Override
     public ComponentSingleMessage append(@NotNull Object append) {
+        if (!MessageLibSettings.get().isAllowEmptyAppend() && isEmpty()) {
+            return this;
+        }
         return new ComponentSingleMessage(
             message.append(Component.join(JoinConfiguration.newlines(), ObjectProcessor.process(append))),
             messageType
@@ -138,6 +142,9 @@ public class ComponentSingleMessage extends ComponentMessage {
      */
     @Override
     public ComponentSingleMessage prepend(@NotNull Object prepend) {
+        if (!MessageLibSettings.get().isAllowEmptyPrepend() && isEmpty()) {
+            return this;
+        }
         return new ComponentSingleMessage(
             Component.join(JoinConfiguration.newlines(),ObjectProcessor.process(prepend)),
             messageType
