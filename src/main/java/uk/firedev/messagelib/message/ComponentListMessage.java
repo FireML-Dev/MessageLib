@@ -341,6 +341,9 @@ public class ComponentListMessage extends ComponentMessage {
      */
     @Override
     public void send(@Nullable Audience audience) {
+        if (isEmpty()) {
+            return;
+        }
         message.forEach(component -> messageType.send(audience, component));
     }
 
@@ -349,6 +352,9 @@ public class ComponentListMessage extends ComponentMessage {
      */
     @Override
     public void send(@NotNull List<? extends Audience> audienceList) {
+        if (isEmpty()) {
+            return;
+        }
         audienceList.forEach(this::send);
     }
 
@@ -357,6 +363,9 @@ public class ComponentListMessage extends ComponentMessage {
      */
     @Override
     public void send(@Nullable Audience... audiences) {
+        if (isEmpty()) {
+            return;
+        }
         for (Audience audience : audiences) {
             send(audience);
         }
@@ -367,6 +376,9 @@ public class ComponentListMessage extends ComponentMessage {
      */
     @Override
     public void broadcast() {
+        if (isEmpty()) {
+            return;
+        }
         message.forEach(Bukkit::broadcast);
     }
 
