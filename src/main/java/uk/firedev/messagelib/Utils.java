@@ -107,4 +107,8 @@ public class Utils {
         return MiniMessage.miniMessage().deserialize(stringMessage);
     }
 
+    public static boolean isEmpty(@NotNull Component component) {
+        return PlainTextComponentSerializer.plainText().serialize(component).isEmpty();
+    }
+
 }
