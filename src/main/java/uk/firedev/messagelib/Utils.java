@@ -4,10 +4,13 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.firedev.messagelib.config.ConfigLoader;
 import uk.firedev.messagelib.message.ComponentMessage;
 import uk.firedev.messagelib.message.MessageType;
@@ -17,6 +20,7 @@ import java.util.regex.Matcher;
 
 public class Utils {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger("MessageLib");
     public static final MiniMessage MINI_MESSAGE = MiniMessage.builder().postProcessor(component -> component).build();
     public static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.builder()
         .useUnusualXRepeatedCharacterHexFormat()
@@ -109,6 +113,18 @@ public class Utils {
 
     public static boolean isEmpty(@NotNull Component component) {
         return PlainTextComponentSerializer.plainText().serialize(component).isEmpty();
+    }
+
+    /**
+     * Logs a throwable to console with your provided message.
+     * @param message The message to show alongside the throwable.
+     */
+    public static void debug(@NotNull String message) {
+        if (!MessageLibSettings.get().isAllowDebug()) {
+            return;
+        }
+        final String errorMessage = "DEBUG - " + message;
+        LOGGER.error(errorMessage, new Throwable());
     }
 
 }

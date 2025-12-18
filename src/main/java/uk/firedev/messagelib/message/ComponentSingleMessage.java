@@ -129,6 +129,7 @@ public class ComponentSingleMessage extends ComponentMessage {
     @Override
     public ComponentSingleMessage append(@NotNull Object append) {
         if (!MessageLibSettings.get().isAllowEmptyAppend() && isEmpty()) {
+            Utils.debug("Cannot append to empty ComponentSingleMessage");
             return this;
         }
         return new ComponentSingleMessage(
@@ -143,6 +144,7 @@ public class ComponentSingleMessage extends ComponentMessage {
     @Override
     public ComponentSingleMessage prepend(@NotNull Object prepend) {
         if (!MessageLibSettings.get().isAllowEmptyPrepend() && isEmpty()) {
+            Utils.debug("Cannot prepend to empty ComponentSingleMessage");
             return this;
         }
         Component processed = Component.join(JoinConfiguration.newlines(),ObjectProcessor.process(prepend));

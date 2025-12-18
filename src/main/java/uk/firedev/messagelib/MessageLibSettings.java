@@ -9,6 +9,7 @@ public class MessageLibSettings {
     private boolean enableLegacy = false;
     private boolean allowEmptyAppend = false;
     private boolean allowEmptyPrepend = false;
+    private boolean allowDebug = false;
 
     private MessageLibSettings() {}
 
@@ -38,6 +39,14 @@ public class MessageLibSettings {
 
     public void setAllowEmptyPrepend(boolean allowEmptyPrepend) {
         this.allowEmptyPrepend = allowEmptyPrepend;
+    }
+
+    public boolean isAllowDebug() {
+        return this.allowDebug;
+    }
+
+    public void setAllowDebug(boolean allowDebug) {
+        this.allowDebug = allowDebug;
     }
 
 }

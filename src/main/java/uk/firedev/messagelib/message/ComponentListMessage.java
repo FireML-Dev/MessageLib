@@ -1,5 +1,6 @@
 package uk.firedev.messagelib.message;
 
+import jdk.jfr.StackTrace;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -147,6 +148,7 @@ public class ComponentListMessage extends ComponentMessage {
     @Override
     public ComponentListMessage append(@NotNull Object append) {
         if (!MessageLibSettings.get().isAllowEmptyAppend() && isEmpty()) {
+            Utils.debug("Cannot append to empty ComponentListMessage");
             return this;
         }
         List<Component> newMessage = new ArrayList<>(message);
@@ -166,6 +168,7 @@ public class ComponentListMessage extends ComponentMessage {
      */
     public ComponentListMessage appendEachLine(@NotNull Object append) {
         if (!MessageLibSettings.get().isAllowEmptyAppend() && isEmpty()) {
+            Utils.debug("Cannot append to empty ComponentListMessage");
             return this;
         }
         Component resolved = Component.join(JoinConfiguration.newlines(), ObjectProcessor.process(append));
@@ -181,6 +184,7 @@ public class ComponentListMessage extends ComponentMessage {
     @Override
     public ComponentListMessage prepend(@NotNull Object prepend) {
         if (!MessageLibSettings.get().isAllowEmptyPrepend() && isEmpty()) {
+            Utils.debug("Cannot prepend to empty ComponentListMessage");
             return this;
         }
         List<Component> newMessage = new ArrayList<>(
@@ -200,6 +204,7 @@ public class ComponentListMessage extends ComponentMessage {
      */
     public ComponentListMessage prependEachLine(@NotNull Object prepend) {
         if (!MessageLibSettings.get().isAllowEmptyPrepend() && isEmpty()) {
+            Utils.debug("Cannot prepend to empty ComponentListMessage");
             return this;
         }
         Component resolved = Component.join(JoinConfiguration.newlines(), ObjectProcessor.process(prepend));
