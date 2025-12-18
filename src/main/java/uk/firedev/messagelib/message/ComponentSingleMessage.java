@@ -145,10 +145,12 @@ public class ComponentSingleMessage extends ComponentMessage {
         if (!MessageLibSettings.get().isAllowEmptyPrepend() && isEmpty()) {
             return this;
         }
-        return new ComponentSingleMessage(
-            Component.join(JoinConfiguration.newlines(),ObjectProcessor.process(prepend)),
-            messageType
-        ).append(message);
+        Component processed = Component.join(JoinConfiguration.newlines(),ObjectProcessor.process(prepend));
+        if (Utils.isEmpty(processed)) {
+            return this;
+        }
+        return new ComponentSingleMessage(processed, messageType)
+            .append(message);
     }
 
     /**
