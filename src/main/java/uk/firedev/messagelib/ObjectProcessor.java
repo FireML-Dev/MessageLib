@@ -53,9 +53,11 @@ public class ObjectProcessor {
     public static @NotNull List<Component> process(@NotNull Object object, @NotNull MiniMessage miniMessage) {
         // Process every object in a list individually, otherwise the list will become a single String.
         if (object instanceof List<?> list) {
-            return list.stream()
-                .flatMap(obj -> process(obj, miniMessage).stream())
-                .toList();
+            List<Component> processed = new ArrayList<>();
+            for (Object obj : list) {
+                processed.addAll(process(obj, miniMessage));
+            }
+            return processed;
         }
         for (Processor<?> processor : PROCESSORS) {
             // We cannot pass the MiniMessage instance here.
@@ -65,7 +67,7 @@ public class ObjectProcessor {
             }
         }
 
-        // If no processor matches, toString the object.
+        // If no processor matches, #toString the object.
         return List.of(Utils.processString(object.toString(), miniMessage));
     }
 
