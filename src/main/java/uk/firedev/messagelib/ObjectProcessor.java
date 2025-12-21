@@ -51,6 +51,12 @@ public class ObjectProcessor {
      * @return The processed object.
      */
     public static @NotNull List<Component> process(@NotNull Object object, @NotNull MiniMessage miniMessage) {
+        // Process every object in a list individually, otherwise the list will become a single String.
+        if (object instanceof List<?> list) {
+            return list.stream()
+                .flatMap(obj -> process(obj, miniMessage).stream())
+                .toList();
+        }
         for (Processor<?> processor : PROCESSORS) {
             // We cannot pass the MiniMessage instance here.
             List<Component> components = processor.process(object);
