@@ -40,7 +40,7 @@ public class ObjectProcessor {
      * @param object The object to process.
      * @return The processed object.
      */
-    public static @NotNull List<Component> process(@NotNull Object object) {
+    public static @NotNull List<Component> process(@Nullable Object object) {
         return process(object, Utils.MINI_MESSAGE);
     }
 
@@ -50,7 +50,10 @@ public class ObjectProcessor {
      * @param miniMessage The MiniMessage instance to use for deserialization.
      * @return The processed object.
      */
-    public static @NotNull List<Component> process(@NotNull Object object, @NotNull MiniMessage miniMessage) {
+    public static @NotNull List<Component> process(@Nullable Object object, @NotNull MiniMessage miniMessage) {
+        if (object == null) {
+            return List.of();
+        }
         // Process every object in a list individually, otherwise the list will become a single String.
         if (object instanceof List<?> list) {
             List<Component> processed = new ArrayList<>();
