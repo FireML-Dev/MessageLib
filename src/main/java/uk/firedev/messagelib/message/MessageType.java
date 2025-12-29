@@ -2,6 +2,7 @@ package uk.firedev.messagelib.message;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,8 +12,14 @@ import java.util.function.BiConsumer;
 public enum MessageType {
     CHAT(Audience::sendMessage),
     ACTION_BAR(Audience::sendActionBar),
-    TITLE((audience, component) -> audience.sendTitlePart(TitlePart.TITLE, component)),
-    SUBTITLE((audience, component) -> audience.sendTitlePart(TitlePart.SUBTITLE, component));
+    TITLE((audience, component) -> {
+        Title title = Title.title(component, Component.empty());
+        audience.showTitle(title);
+    }),
+    SUBTITLE((audience, component) -> {
+        Title title = Title.title(Component.empty(), component);
+        audience.showTitle(title);
+    });
 
     private final BiConsumer<Audience, Component> consumer;
 
