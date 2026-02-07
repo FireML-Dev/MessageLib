@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.messagelib.message.ComponentListMessage;
 import uk.firedev.messagelib.message.ComponentSingleMessage;
+import uk.firedev.messagelib.message.MessageType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,16 +42,6 @@ public class ObjectProcessor {
      * @return The processed object.
      */
     public static @NotNull List<Component> process(@Nullable Object object) {
-        return process(object, Utils.MINI_MESSAGE);
-    }
-
-    /**
-     * Processes an object into a Component list using registered processors.
-     * @param object The object to process.
-     * @param miniMessage The MiniMessage instance to use for deserialization.
-     * @return The processed object.
-     */
-    public static @NotNull List<Component> process(@Nullable Object object, @NotNull MiniMessage miniMessage) {
         if (object == null) {
             return List.of();
         }
@@ -58,7 +49,7 @@ public class ObjectProcessor {
         if (object instanceof List<?> list) {
             List<Component> processed = new ArrayList<>();
             for (Object obj : list) {
-                processed.addAll(process(obj, miniMessage));
+                processed.addAll(process(obj));
             }
             return processed;
         }
@@ -71,7 +62,7 @@ public class ObjectProcessor {
         }
 
         // If no processor matches, #toString the object.
-        return List.of(Utils.processString(object.toString(), miniMessage));
+        return List.of(Utils.processString(object.toString()));
     }
 
     /**

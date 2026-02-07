@@ -25,7 +25,6 @@ public class ComponentSingleMessage extends ComponentMessage {
 
     private final Component message;
     private final MessageType messageType;
-    private MiniMessage miniMessage = Utils.MINI_MESSAGE;
 
     protected ComponentSingleMessage(@NotNull Component message, @NotNull MessageType messageType) {
         this.message = ComponentMessage.ROOT.append(message);
@@ -76,28 +75,10 @@ public class ComponentSingleMessage extends ComponentMessage {
      * @return The underlying message as MiniMessage text.
      */
     public @NotNull String getAsMiniMessage() {
-        return MiniMessage.miniMessage().serialize(message);
+        return MessageLibSettings.get().getMiniMessage().serialize(message);
     }
 
     // Class Methods
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public @NotNull MiniMessage miniMessage() {
-        return miniMessage;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ComponentSingleMessage miniMessage(@NotNull MiniMessage miniMessage) {
-        ComponentSingleMessage newMessage = new ComponentSingleMessage(message, messageType);
-        newMessage.miniMessage = miniMessage;
-        return newMessage;
-    }
 
     /**
      * {@inheritDoc}

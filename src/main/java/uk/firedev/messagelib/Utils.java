@@ -14,17 +14,22 @@ import org.slf4j.LoggerFactory;
 import uk.firedev.messagelib.config.ConfigLoader;
 import uk.firedev.messagelib.message.ComponentMessage;
 import uk.firedev.messagelib.message.MessageType;
+import uk.firedev.messagelib.placeholders.PAPITagResolver;
 
 import java.util.List;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("MessageLib");
-    public static final MiniMessage MINI_MESSAGE = MiniMessage.builder().postProcessor(component -> component).build();
     public static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.builder()
-        .useUnusualXRepeatedCharacterHexFormat()
         .character('&')
+        .hexColors()
+        .useUnusualXRepeatedCharacterHexFormat()
+        .build();
+    public static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER_SECTION = LegacyComponentSerializer.builder()
+        .character('§')
         .hexColors()
         .useUnusualXRepeatedCharacterHexFormat()
         .build();
@@ -46,23 +51,13 @@ public class Utils {
      * @return The processed Component.
      */
     public static @NotNull Component processString(@NotNull String message) {
-        return processString(message, MINI_MESSAGE);
-    }
-
-    /**
-     * Processes a String into a Component, detecting whether it's Legacy or MiniMessage format.
-     * @param message The message to process.
-     * @param miniMessage The MiniMessage instance to use for deserialization.
-     * @return The processed Component.
-     */
-    public static @NotNull Component processString(@NotNull String message, @NotNull MiniMessage miniMessage) {
         if (message.isEmpty()) {
             return Component.empty();
         }
         if (isLegacy(message)) {
             return LEGACY_COMPONENT_SERIALIZER.deserialize(message);
         } else {
-            return miniMessage.deserialize(message);
+            return MessageLibSettings.get().getMiniMessage().deserialize(message);
         }
     }
 
