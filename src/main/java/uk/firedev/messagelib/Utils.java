@@ -87,23 +87,13 @@ public class Utils {
         if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             return component;
         }
-        String stringMessage = MiniMessage.miniMessage().serialize(component);
-        Matcher matcher = PlaceholderAPI.getPlaceholderPattern().matcher(stringMessage);
-        while (matcher.find()) {
-            // Find matched String
-            String matched = matcher.group();
-            // Convert to Legacy Component and into a MiniMessage String
-            String parsed = MiniMessage.miniMessage().serialize(
-                LegacyComponentSerializer.legacySection().deserialize(
-                    PlaceholderAPI.setPlaceholders(player, matched)
-                )
-            );
-            // Escape matched String so we don't have issues
-            String safeMatched = Matcher.quoteReplacement(matched);
-            // Replace all instances of the matched String with the parsed placeholder.
-            stringMessage = stringMessage.replaceAll(safeMatched, parsed);
-        }
-        return MiniMessage.miniMessage().deserialize(stringMessage);
+        MiniMessage mm = MiniMessage.miniMessage();
+        String input = mm.serialize(component);
+
+        Matcher matcher = PlaceholderAPI.getPlaceholderPattern().matcher(input);
+        String result = matcher.replaceAll("<papi:$1>");
+
+        return mm.deserialize(result, PAPITagResolver.get(player));
     }
 
     public static boolean isEmpty(@NotNull Component component) {
