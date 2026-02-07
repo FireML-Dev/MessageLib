@@ -90,6 +90,10 @@ public class Utils {
         MiniMessage mm = MiniMessage.miniMessage();
         String input = mm.serialize(component);
 
+        if (!input.contains("%")) {
+            return component;
+        }
+
         Matcher matcher = PlaceholderAPI.getPlaceholderPattern().matcher(input);
         String result = matcher.replaceAll("<papi:$1>");
 
