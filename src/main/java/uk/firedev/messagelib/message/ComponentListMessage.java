@@ -30,12 +30,12 @@ public class ComponentListMessage extends ComponentMessage {
     private final MessageType messageType;
 
     protected ComponentListMessage(@NotNull List<Component> message, @NotNull MessageType messageType) {
-        message.stream().map(ROOT::append).forEach(this.message::add);
+        message.forEach(component -> this.message.add(ROOT.append(component).compact()));
         this.messageType = messageType;
     }
 
     protected ComponentListMessage(@NotNull Component message, @NotNull MessageType messageType) {
-        this.message.add(ComponentMessage.ROOT.append(message));
+        this.message.add(ComponentMessage.ROOT.append(message).compact());
         this.messageType = messageType;
     }
 

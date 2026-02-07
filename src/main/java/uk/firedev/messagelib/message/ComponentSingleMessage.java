@@ -27,7 +27,7 @@ public class ComponentSingleMessage extends ComponentMessage {
     private final MessageType messageType;
 
     protected ComponentSingleMessage(@NotNull Component message, @NotNull MessageType messageType) {
-        this.message = ComponentMessage.ROOT.append(message);
+        this.message = ComponentMessage.ROOT.append(message).compact();
         this.messageType = messageType;
     }
 
