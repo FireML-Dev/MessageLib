@@ -23,13 +23,14 @@ import java.util.regex.Pattern;
 public class Utils {
 
     public static final Logger LOGGER = LoggerFactory.getLogger("MessageLib");
+    private static final char SECTION = '§';
     public static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.builder()
         .character('&')
         .hexColors()
         .useUnusualXRepeatedCharacterHexFormat()
         .build();
     public static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER_SECTION = LegacyComponentSerializer.builder()
-        .character('§')
+        .character(SECTION)
         .hexColors()
         .useUnusualXRepeatedCharacterHexFormat()
         .build();
@@ -40,6 +41,10 @@ public class Utils {
         }
         if (!MessageLibSettings.get().isEnableLegacy()) {
             return false;
+        }
+        // If the message contains a section sign, it's definitely legacy.
+        if (message.contains(Character.toString(SECTION))) {
+            return true;
         }
         // If no MiniMessage tags get stripped, the message is assumed to be legacy.
         return MiniMessage.miniMessage().stripTags(message).equals(message);
@@ -55,7 +60,11 @@ public class Utils {
             return Component.empty();
         }
         if (isLegacy(message)) {
-            return LEGACY_COMPONENT_SERIALIZER.deserialize(message);
+            // Choose the correct serializer
+            LegacyComponentSerializer serializer = message.contains(Character.toString(SECTION))
+                ? LEGACY_COMPONENT_SERIALIZER_SECTION
+                : LEGACY_COMPONENT_SERIALIZER;
+            return serializer.deserialize(message);
         } else {
             return MessageLibSettings.get().getMiniMessage().deserialize(message);
         }
@@ -114,6 +123,14 @@ public class Utils {
         }
         final String errorMessage = "DEBUG - " + message;
         LOGGER.error(errorMessage, new Throwable());
+    }
+
+    public static void testString(String string) {
+        String dumb = "§x§f§f§0§0§0§0§l$";
+
+        Component component = LEGACY_COMPONENT_SERIALIZER_SECTION.deserialize(dumb);
+        System.out.println("The following should contain dumb legacy chars.");
+        System.out.println(PlainTextComponentSerializer.plainText().serialize(component));
     }
 
 }
