@@ -190,14 +190,21 @@ public class ComponentSingleMessage extends ComponentMessage {
     }
 
     /**
-     * Checks if the underlying plain text contains the specified string.
-     * @param string The string to check for.
-     * @return True if the underlying plain text contains the specified string, false otherwise.
      * @deprecated Use {@link #contains(String...)} instead.
      */
     @Deprecated(forRemoval = true)
     public boolean containsString(@NotNull String string) {
-        return getAsPlainText().contains(string);
+        return contains(string);
+    }
+
+    /**
+     * Checks if the underlying plain text contains the specified string.
+     * @param string The strings to check for.
+     * @return True if the underlying plain text contains the specified string, false otherwise.
+     */
+    public boolean contains(@NotNull String @NotNull... string) {
+        String plainText = getAsPlainText();
+        return Arrays.stream(string).allMatch(plainText::contains);
     }
 
     /**
