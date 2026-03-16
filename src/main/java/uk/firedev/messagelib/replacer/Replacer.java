@@ -110,7 +110,7 @@ public class Replacer {
             boolean replaced = false;
             for (Map.Entry<String, Object> entry : replacements.entrySet()) {
                 ComponentSingleMessage single = ComponentMessage.componentMessage(component);
-                if (single.containsString(entry.getKey())) {
+                if (single.contains(entry.getKey())) {
                     newList.addAll(ObjectProcessor.process(entry.getValue()));
                     replaced = true;
                     break;

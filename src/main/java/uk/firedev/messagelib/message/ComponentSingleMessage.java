@@ -16,6 +16,7 @@ import uk.firedev.messagelib.ObjectProcessor;
 import uk.firedev.messagelib.Utils;
 import uk.firedev.messagelib.replacer.Replacer;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -192,7 +193,9 @@ public class ComponentSingleMessage extends ComponentMessage {
      * Checks if the underlying plain text contains the specified string.
      * @param string The string to check for.
      * @return True if the underlying plain text contains the specified string, false otherwise.
+     * @deprecated Use {@link #contains(String...)} instead.
      */
+    @Deprecated(forRemoval = true)
     public boolean containsString(@NotNull String string) {
         return getAsPlainText().contains(string);
     }
