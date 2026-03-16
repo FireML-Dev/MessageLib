@@ -16,6 +16,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly("uk.firedev:MessageLib:1.0.8") // This may not be the latest version. Check the latest version in the gradle.properties file.
+    compileOnly("uk.firedev:MessageLib:1.0.8") // This may not be the latest version.
 }
 ```
