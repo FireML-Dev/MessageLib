@@ -31,39 +31,39 @@ public abstract class ComponentMessage {
 
     // Single Messages
 
-    public static ComponentSingleMessage componentMessage(@NotNull Component message, @NotNull MessageType messageType) {
+    public static @NotNull ComponentSingleMessage componentMessage(@NotNull Component message, @NotNull MessageType messageType) {
         return new ComponentSingleMessage(message, messageType);
     }
 
-    public static ComponentSingleMessage componentMessage(@NotNull Component message) {
+    public static @NotNull ComponentSingleMessage componentMessage(@NotNull Component message) {
         return componentMessage(message, MessageType.CHAT);
     }
 
-    public static ComponentSingleMessage componentMessage(@NotNull Object object, @NotNull MessageType messageType) {
+    public static @NotNull ComponentSingleMessage componentMessage(@NotNull Object object, @NotNull MessageType messageType) {
         return componentMessage(
             Component.join(JoinConfiguration.newlines(), ObjectProcessor.process(object)),
             messageType
         );
     }
 
-    public static ComponentSingleMessage componentMessage(@NotNull Object object) {
+    public static @NotNull ComponentSingleMessage componentMessage(@NotNull Object object) {
         return componentMessage(object, MessageType.CHAT);
     }
 
-    public static ComponentSingleMessage componentMessage(@NotNull String message, @NotNull MessageType messageType) {
+    public static @NotNull ComponentSingleMessage componentMessage(@NotNull String message, @NotNull MessageType messageType) {
         return componentMessage(
             Utils.processString(message),
             messageType
         );
     }
 
-    public static ComponentSingleMessage componentMessage(@NotNull String message) {
+    public static @NotNull ComponentSingleMessage componentMessage(@NotNull String message) {
         return componentMessage(message, MessageType.CHAT);
     }
 
     // List Messages
 
-    public static ComponentListMessage componentMessage(@NotNull List<?> message, @NotNull MessageType messageType) {
+    public static @NotNull ComponentListMessage componentMessage(@NotNull List<?> message, @NotNull MessageType messageType) {
         return new ComponentListMessage(
             message.stream()
                 .flatMap(object -> ObjectProcessor.process(object).stream())
@@ -72,22 +72,22 @@ public abstract class ComponentMessage {
         );
     }
 
-    public static ComponentListMessage componentMessage(@NotNull List<?> message) {
+    public static @NotNull ComponentListMessage componentMessage(@NotNull List<?> message) {
         return componentMessage(message, MessageType.CHAT);
     }
 
     // Ambiguous Messages - Could be single or list.
 
-    public static ComponentMessage componentMessage(@NotNull ConfigLoader<?> loader, @NotNull String path) {
+    public static @Nullable ComponentMessage componentMessage(@NotNull ConfigLoader<?> loader, @NotNull String path) {
         return Utils.getFromConfig(loader, path);
     }
 
-    public static ComponentMessage componentMessage(@NotNull ConfigLoader<?> loader, @NotNull String path, @NotNull String def) {
+    public static @NotNull ComponentMessage componentMessage(@NotNull ConfigLoader<?> loader, @NotNull String path, @NotNull String def) {
         ComponentMessage message = Utils.getFromConfig(loader, path);
         return message == null ? componentMessage(def) : message;
     }
 
-    public static ComponentMessage componentMessage(@NotNull ConfigLoader<?> loader, @NotNull String path, @NotNull Component def) {
+    public static @NotNull ComponentMessage componentMessage(@NotNull ConfigLoader<?> loader, @NotNull String path, @NotNull Component def) {
         ComponentMessage message = Utils.getFromConfig(loader, path);
         return message == null ? componentMessage(def) : message;
     }
