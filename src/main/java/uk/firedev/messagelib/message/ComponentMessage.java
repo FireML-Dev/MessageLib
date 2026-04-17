@@ -22,7 +22,6 @@ public abstract class ComponentMessage {
     public static final Component ROOT = Component.empty()
         .applyFallbackStyle(
             Style.style()
-                .color(NamedTextColor.WHITE)
                 .decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
                 .build()
         );
