@@ -3,7 +3,6 @@ package uk.firedev.messagelib;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class MessageLibSettings {

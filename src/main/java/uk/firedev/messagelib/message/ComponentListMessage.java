@@ -269,7 +269,7 @@ public class ComponentListMessage extends ComponentMessage {
      */
     @Override
     public ComponentListMessage parsePlaceholderAPI(@Nullable OfflinePlayer player) {
-        if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+        if (!Utils.PAPI_AVAILABLE) {
             return this;
         }
 

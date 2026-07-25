@@ -18,7 +18,6 @@ import uk.firedev.messagelib.placeholders.PAPITagResolver;
 
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Utils {
 
@@ -34,6 +33,18 @@ public class Utils {
         .hexColors()
         .useUnusualXRepeatedCharacterHexFormat()
         .build();
+
+    public static final boolean PAPI_AVAILABLE;
+    static {
+        boolean available;
+        try {
+            Class.forName("me.clip.placeholderapi.PlaceholderAPI");
+            available = true;
+        } catch (ClassNotFoundException exception) {
+            available = false;
+        }
+        PAPI_AVAILABLE = available;
+    }
 
     public static boolean isLegacy(@NotNull String message) {
         if (message.isEmpty()) {
@@ -93,7 +104,8 @@ public class Utils {
     }
 
     public static Component parsePlaceholderAPI(@NotNull Component component, @Nullable OfflinePlayer player) {
-        if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+        if (!PAPI_AVAILABLE) {
+            debug("PlaceholderAPI not found. It's either not installed or not a dependency.");
             return component;
         }
         MiniMessage mm = MiniMessage.miniMessage();
@@ -121,16 +133,8 @@ public class Utils {
         if (!MessageLibSettings.get().isAllowDebug()) {
             return;
         }
-        final String errorMessage = "DEBUG - " + message;
+        final String errorMessage = "[DEBUG] " + message;
         LOGGER.error(errorMessage, new Throwable());
-    }
-
-    public static void testString(String string) {
-        String dumb = "§x§f§f§0§0§0§0§l$";
-
-        Component component = LEGACY_COMPONENT_SERIALIZER_SECTION.deserialize(dumb);
-        System.out.println("The following should contain dumb legacy chars.");
-        System.out.println(PlainTextComponentSerializer.plainText().serialize(component));
     }
 
 }

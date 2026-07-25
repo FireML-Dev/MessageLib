@@ -3,7 +3,6 @@ package uk.firedev.messagelib.message;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.OfflinePlayer;
@@ -22,6 +21,7 @@ public abstract class ComponentMessage {
     public static final Component ROOT = Component.empty()
         .applyFallbackStyle(
             Style.style()
+                .color(NamedTextColor.WHITE)
                 .decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
                 .build()
         );

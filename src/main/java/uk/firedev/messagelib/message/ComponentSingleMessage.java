@@ -171,7 +171,7 @@ public class ComponentSingleMessage extends ComponentMessage {
      */
     @Override
     public ComponentSingleMessage parsePlaceholderAPI(@Nullable OfflinePlayer player) {
-        if (!Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+        if (!Utils.PAPI_AVAILABLE) {
             return this;
         }
         return new ComponentSingleMessage(
